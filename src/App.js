@@ -1,5 +1,5 @@
 import './App.css';
-import Counter from './Components/Counter'
+import ToDo from './Components/ToDo'
 // import Result from './Components/Result'
 
 
@@ -7,7 +7,7 @@ import Counter from './Components/Counter'
 function App() {
   return (
     <div className="App">
-      <Counter />
+      <ToDo />
     </div>
   );
 }
