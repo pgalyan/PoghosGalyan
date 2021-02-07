@@ -1,22 +1,24 @@
 import React, {Component} from 'react'
-import Tasks from './Tasks'
+import Tasks from './Tasks.js'
 
 class ToDo extends Component {
 state = {
     tasks: ['task 1', 'task 2', 'task 3']
 }
 
+
+
 render(){
-    const Task = this.state.tasks.map((task, index)=>{
+    const aaaa = this.state.tasks.map((task, index)=>{
         return(
-              <p index={index}>{task}</p> 
+            <Tasks task={task} />
        )    
    })
 
     return(
         <div>
-            <Tasks  Task={Task} />
-
+            {aaaa}
+            
             <div>
                 <input></input>
                 <button>ADD</button>

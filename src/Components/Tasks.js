@@ -1,9 +1,9 @@
 
 
-const Tasks = ({Task}) => {
+const Tasks = ({task}) => {
 return(
     <div className='tasks'>
-        {Task}
+      <p> {task}</p> 
     </div>
 )
 }
