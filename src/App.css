@@ -67,6 +67,7 @@ color: skyblue;
     
 }
 
-.tasks > p {
+.tasks  div {
   margin: 20px auto;
+
 }
