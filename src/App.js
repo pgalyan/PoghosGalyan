@@ -1,5 +1,5 @@
 import './App.css';
-import ToDo from './Components/ToDo'
+import ToDo from './Components/ToDo/ToDo'
 // import Result from './Components/Result'
 
 

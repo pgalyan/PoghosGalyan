@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import Task from './Task.js'
-import AddTask from "./AddNewTask";
+import Task from '../Task/Task.js'
+import AddTask from "../AddTask/AddNewTask";
+import Styles from './ToDo.module.css';
 
 class ToDo extends Component {
 state = {
@@ -35,7 +36,7 @@ render(){
             <AddTask
             handleSubmit={this.handleSubmit}
             />
-            <div className='tasks'>
+            <div className={Styles.tasks}>
                 {Tasks}
             </div>
             

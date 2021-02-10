@@ -61,13 +61,3 @@ color: skyblue;
 }
 
 
-.tasks {
-  display: flex;
-    justify-content: space-between;
-    
-}
-
-.tasks  div {
-  margin: 20px auto;
-
-}
