@@ -1,13 +1,12 @@
+import Styles from './Task.module.css'
 
 
-const Task = ({task}) => {
+const Task = ({task,id}) => {
+
 return(
-  
-    <div >
-      <p> {task}</p> 
-    </div>
-
-    
+      <div className={Styles.tasks} id={id}>
+        <p> {task}</p> 
+      </div>
 )
 }
 

@@ -17,12 +17,12 @@ color: skyblue;
   }
 
 
-  .container {
+  /* .container {
     display: flex;
     justify-content: space-between;
     height: 100%;
     background-color:#322514;
-  }
+  } */
 
   .card {
     height: 400px;

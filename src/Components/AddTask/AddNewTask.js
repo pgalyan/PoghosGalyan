@@ -1,4 +1,5 @@
-import React from "react";
+import React from "react"
+import {InputGroup,Button,FormControl,Col} from 'react-bootstrap'
 
 class AddTask extends React.Component {
     state = {
@@ -10,7 +11,6 @@ class AddTask extends React.Component {
         this.setState({
             inputValue: value
         })
-
     }
 
     render(){
@@ -25,17 +25,22 @@ class AddTask extends React.Component {
         }
 
         return(
-            <div>
-                <input
-                onChange={this.handleChange}
-                value={inputValue}
-                />
-                <button
-                onClick={sub}
-                >
-                    ADD
-                    </button>
-            </div>
+            <Col xs={12} md={6} lg={4}>
+                     <InputGroup className="mb-3" onChange={this.handleChange}
+                         value={inputValue}>
+                         <FormControl
+                            placeholder="Task name"
+                         />
+                        <InputGroup.Append>
+                        <Button variant="outline-secondary" onClick={sub}>Add task</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
+            </Col>
+                    
+            
+
+
+
         )
     }
 }

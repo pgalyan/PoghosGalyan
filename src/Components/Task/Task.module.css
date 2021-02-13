@@ -1,0 +1,19 @@
+/* .tasks {
+    display: flex;
+      justify-content: space-between;
+      
+  } */
+  
+  .tasks {
+    margin: 20px auto;
+    background-color: rgb(206, 255, 91);
+    height: 100px;
+    width:auto;
+    text-align: center;
+    border: 2px solid rgb(16, 97, 47);
+  }
+
+  .tasks > p{
+    margin: 35px auto;
+    padding: auto;
+  }
