@@ -1,9 +1,9 @@
 import React from "react"
-import {InputGroup,Button,FormControl,Col} from 'react-bootstrap'
+import { InputGroup, Button, FormControl, Col } from 'react-bootstrap'
 
 class AddTask extends React.Component {
     state = {
-        inputValue : ''
+        inputValue: ''
     }
 
     handleChange = (event) => {
@@ -13,31 +13,31 @@ class AddTask extends React.Component {
         })
     }
 
-    render(){
+    render() {
 
-        const {inputValue} = this.state
-        const {handleSubmit} = this.props
-        const sub = () =>{
+        const { inputValue } = this.state
+        const { handleSubmit } = this.props
+        const sub = () => {
             handleSubmit(inputValue)
             this.setState({
                 inputValue: ''
             })
         }
 
-        return(
+        return (
             <Col xs={12} md={6} lg={4}>
-                     <InputGroup className="mb-3" onChange={this.handleChange}
-                         value={inputValue}>
-                         <FormControl
-                            placeholder="Task name"
-                         />
-                        <InputGroup.Append>
+                <InputGroup className="mb-3" onChange={this.handleChange}>
+                    <FormControl
+                        placeholder="Task name"
+                        value={inputValue}
+                    />
+                    <InputGroup.Append>
                         <Button variant="outline-secondary" onClick={sub}>Add task</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
+                    </InputGroup.Append>
+                </InputGroup>
             </Col>
-                    
-            
+
+
 
 
 

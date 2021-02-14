@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Task from '../Task/Task.js'
 import AddTask from "../AddTask/AddNewTask";
-import {Container, Row, Col } from 'react-bootstrap'
+import {Container, Row } from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen';
 
 class ToDo extends Component {
@@ -37,9 +37,9 @@ render(){
                  />
            </Row>
             <Row  className="justify-content-md-center">
-            <Col xs={12} md={4} lg={3} >
+            
                  {Tasks}
-            </Col>
+            
             </Row>
         </Container>   
     )
