@@ -28,19 +28,14 @@ class AddTask extends React.Component {
             <Col xs={12} md={6} lg={4}>
                 <InputGroup className="mb-3" onChange={this.handleChange}>
                     <FormControl
-                        placeholder="Task name"
+                        placeholder="Task title"
                         value={inputValue}
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={sub}>Add task</Button>
+                        <Button variant="outline-secondary"  onClick={sub}>Add task</Button>
                     </InputGroup.Append>
                 </InputGroup>
             </Col>
-
-
-
-
-
         )
     }
 }

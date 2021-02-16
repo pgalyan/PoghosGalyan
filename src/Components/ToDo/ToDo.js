@@ -1,49 +1,82 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Task from '../Task/Task.js'
 import AddTask from "../AddTask/AddNewTask";
-import {Container, Row } from 'react-bootstrap'
+import { Container, Row , Col} from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen';
 
 class ToDo extends Component {
-state = {
-    tasks: ['task 1', 'task 2', 'task 3', 'task 4', 'task 5', 'task 6' ]
-}
+    state = {
+        tasks: [
+            {
+                id: IdGenerator(),
+                title: 'title 1',
+            },
+            {
+                id: IdGenerator(),
+                title: 'title 2',
+            },
+            {
+                id: IdGenerator(),
+                title: 'title 3',
+            }
+        ]
+    }
 
-handleSubmit = (value) => {
-    if (!value) return;
-    const tasks = [...this.state.tasks]
-    tasks.push(value)
-    this.setState({
-        tasks
-    });
-}
+    handleSubmit = (value) => {
+        if (!value) return;
+        const tasks = [...this.state.tasks]
+        tasks.push({
+            id:IdGenerator(),
+            title: value,
+        })
+        this.setState({
+            tasks
+        });
+    }
 
-render(){
-    const Tasks = this.state.tasks.map((task, index)=>{
-        return(
-            <Task
-             task={task}
-             id= {IdGenerator()}
-             key={index}
-            />
-       )    
-   })
+    handleDeleteOneTask = (id) => {
+        let tasks = [...this.state.tasks];
+        tasks = tasks.filter(item => item.id !== id)
+        this.setState({
+            tasks
+        });
+    }
 
-    return(
-        <Container>        
-           <Row className="justify-content-md-center mt-3">
-                <AddTask
-                            handleSubmit={this.handleSubmit}
-                 />
-           </Row>
-            <Row  className="justify-content-md-center">
-            
-                 {Tasks}
-            
-            </Row>
-        </Container>   
-    )
-}
+    render() {
+        const Tasks = this.state.tasks.map((task) => {
+            return (
+                <Col
+                    xs={12}
+                    md={4}
+                    lg={3} 
+                    className='mr-3 mb-3'
+                    key={task.id}
+                    >
+                    <Task
+                        task={task}
+                        handleDeleteOneTask={this.handleDeleteOneTask}
+                    />
+                </Col>
+            )
+        })
+
+
+        return (
+            <Container>
+                <Row className="justify-content-md-center mt-3">
+                    <AddTask
+                        handleSubmit={this.handleSubmit}
+                    />
+                </Row>
+                <Row className="justify-content-md-center">
+                    {!Tasks.length && <div>Tasks is Empty</div>}
+
+                    {Tasks}
+
+                </Row>
+            </Container>
+        )
+    }
 
 }
 
