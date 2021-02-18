@@ -2,13 +2,13 @@
 import { Card, Button ,InputGroup } from 'react-bootstrap'
 
 
-const Task = ({ task , handleDeleteOneTask }) => {
+const Task = ({ task , handleDeleteOneTask,toggleSetRemoveTaskId }) => {
 
   return (
 
     <Card >
-      <InputGroup.Prepend className='justify-content-rigth mt-3 ml-1'>
-        <InputGroup.Checkbox />
+      <InputGroup.Prepend className='justify-content-rigth mt-1 ml-1'>
+        <InputGroup.Checkbox onClick= {()=> toggleSetRemoveTaskId(task.id)} />
       </InputGroup.Prepend>
       <Card.Body>
         <Card.Title>{task.title}</Card.Title>
