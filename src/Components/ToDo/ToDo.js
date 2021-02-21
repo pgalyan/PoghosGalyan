@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Task from '../Task/Task.js'
-import AddTask from "../AddTask/AddNewTask";
-import { Container, Row, Col, Button } from 'react-bootstrap'
-import IdGenerator from '../../Helpers/IdGen';
+import AddTask from "../AddTask/AddNewTask"
+import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap'
+import IdGenerator from '../../Helpers/IdGen'
 
 class ToDo extends Component {
     state = {
@@ -20,7 +20,7 @@ class ToDo extends Component {
                 title: 'title 3',
             }
         ],
-        removeTasks: []
+        removeTasks: new Set()
     }
 
     handleSubmit = (value) => {
@@ -36,7 +36,7 @@ class ToDo extends Component {
     }
 
     handleDeleteOneTask = (id) => {
-        let tasks = [...this.state.tasks];
+        let tasks = [...this.state.tasks]
         tasks = tasks.filter(item => item.id !== id)
         this.setState({
             tasks
@@ -51,20 +51,31 @@ class ToDo extends Component {
         } else {
             removeTasks = removeTasks.add(id)
         }
-
-
         this.setState({
             removeTasks
         })
+    }
 
+    toggleSetSelectAllTasks = () => {
+        let tasks = [...this.state.tasks]
+        let removeTasks = new Set(this.state.removeTasks)
+
+        if (removeTasks.size !== 0) {
+            removeTasks.clear()
+        } else {
+            for (let key in tasks) {
+                removeTasks.add(tasks[key].id)
+            }
+        }
+        this.setState({
+            removeTasks
+        })
     }
 
     removeSelectedTasks = () => {
-        let tasks = [...this.state.tasks];
+        let tasks = [...this.state.tasks]
         let removeTasks = new Set(this.state.removeTasks)
         tasks = tasks.filter(item => !removeTasks.has(item.id))
-
-
         this.setState({
             tasks,
             removeTasks: new Set()
@@ -75,7 +86,7 @@ class ToDo extends Component {
     render() {
         const removeTasks = new Set(this.state.removeTasks)
 
-        console.log(removeTasks.size)
+
         const Tasks = this.state.tasks.map((task) => {
             return (
                 <Col
@@ -84,12 +95,14 @@ class ToDo extends Component {
                     lg={3}
                     className='mr-3 mb-3'
                     key={task.id}
+
                 >
                     <Task
                         task={task}
                         handleDeleteOneTask={this.handleDeleteOneTask}
                         toggleSetRemoveTaskId={this.toggleSetRemoveTaskId}
                         disabled={!!!removeTasks.size}
+                        checked={removeTasks.has(task.id)}
                     />
                 </Col>
             )
@@ -103,6 +116,18 @@ class ToDo extends Component {
                         handleSubmit={this.handleSubmit}
                         disabled={!!removeTasks.size}
                     />
+                </Row>
+                <Row className="justify-content-md-center mt-3 mb-3">
+                    <InputGroup.Prepend  >
+
+                        <InputGroup.Checkbox
+                            
+                            onClick={this.toggleSetSelectAllTasks}
+                            // onChange={()=>!!!removeTasks.size ? `checked`: ``}  
+                            checked={!!removeTasks.size}
+                        />
+                        <div> Select all tassks</div>
+                    </InputGroup.Prepend>
                 </Row>
                 <Row className="justify-content-md-center">
                     {!Tasks.length && <div>Tasks is Empty</div>}
