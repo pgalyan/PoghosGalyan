@@ -123,7 +123,7 @@ class ToDo extends Component {
                         <InputGroup.Checkbox
                             
                             onClick={this.toggleSetSelectAllTasks}
-                            // onChange={()=>!!!removeTasks.size ? `checked`: ``}  
+                            // onChange={()=> `checked = ${!!removeTasks.size}`}  
                             checked={!!removeTasks.size}
                         />
                         <div> Select all tassks</div>

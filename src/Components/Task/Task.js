@@ -23,14 +23,21 @@ import { Card, Button, InputGroup } from 'react-bootstrap'
 
 class Task extends React.PureComponent {
 
+  
+
   render() {
+
+    console.log('render')
     const { task, handleDeleteOneTask, toggleSetRemoveTaskId, checked } = this.props
 
     return (
 
       <Card className={`${Styles.tasks} ${checked && Styles.checked}`}>
         <InputGroup.Prepend className='justify-content-rigth mt-3 ml-3'>
-          <InputGroup.Checkbox onClick={() => toggleSetRemoveTaskId(task.id)} checked={checked && true} />
+          <InputGroup.Checkbox onClick={() => toggleSetRemoveTaskId(task.id)} 
+          checked = {checked && true}
+          // onChange={()=> `checked = ${checked && true}`} 
+          />
         </InputGroup.Prepend>
         <Card.Body>
           <Card.Title>{task.title}</Card.Title>
@@ -41,4 +48,4 @@ class Task extends React.PureComponent {
   }
 }
 
-export default memo(Task)
+export default Task
