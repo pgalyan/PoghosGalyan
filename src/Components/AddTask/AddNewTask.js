@@ -1,10 +1,17 @@
 import React from "react"
 import { InputGroup, Button, FormControl, Col } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 
 class AddTask extends React.Component {
-    state = {
-        inputValue: ''
+    constructor(props){
+        super(props);
+        this.inputRef = React.createRef()
+        this.state = {
+            inputValue: ''
+        }
     }
+    
+    
 
     handleChange = (event) => {
         const { value } = event.target
@@ -25,6 +32,10 @@ class AddTask extends React.Component {
         })
     }
 
+    componentDidMount(){
+        this.inputRef.current.focus();
+    }
+
     render() {
 
         const { inputValue } = this.state
@@ -41,6 +52,7 @@ class AddTask extends React.Component {
                         placeholder="Task title"
                         value={inputValue}
                         disabled={disabled}
+                        ref={this.inputRef}
                     />
                     <InputGroup.Append>
                         <Button
@@ -57,6 +69,11 @@ class AddTask extends React.Component {
         )
     }
 }
+
+AddTask.prototypes = {
+    handleSubmit: PropTypes.func,
+    disabled: PropTypes.bool.isRequired
+  }
 
 
 export default AddTask

@@ -3,6 +3,7 @@ import Task from '../Task/Task.js'
 import AddTask from "../AddTask/AddNewTask"
 import { Container, Row, Col, Button} from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen'
+// import PropTypes from 'prop-types'
 
 class ToDo extends Component {
     state = {
