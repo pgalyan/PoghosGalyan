@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Task from '../Task/Task.js'
 import AddTask from "../AddTask/AddNewTask"
-import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap'
+import { Container, Row, Col, Button} from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen'
 
 class ToDo extends Component {
@@ -117,33 +117,38 @@ class ToDo extends Component {
                         disabled={!!removeTasks.size}
                     />
                 </Row>
-                <Row className="justify-content-md-center mt-3 mb-3">
+                {/* <Row className="justify-content-md-center mt-3 mb-3">
                     <InputGroup.Prepend  >
-
                         <InputGroup.Checkbox
-                            
-                            onClick={this.toggleSetSelectAllTasks}
-                            // onChange={()=> `checked = ${!!removeTasks.size}`}  
+                            onChange={this.toggleSetSelectAllTasks}
                             checked={!!removeTasks.size}
                         />
                         <div> Select all tassks</div>
                     </InputGroup.Prepend>
-                </Row>
+                </Row> */}
                 <Row className="justify-content-md-center">
                     {!Tasks.length && <div>Tasks is Empty</div>}
 
                     {Tasks}
 
                 </Row>
-                <Row className="justify-content-md-center mt-2">
+                <Row className="justify-content-md-center mt-2 ">
                     <Col>
                         <Button
-
+                            className="mr-2"
                             variant="danger"
                             onClick={this.removeSelectedTasks}
                             disabled={!!!removeTasks.size}
                         >
                             Remove Selected
+                            </Button>
+
+                        <Button
+                         onClick={this.toggleSetSelectAllTasks}
+                         disabled={!!!this.state.tasks.length}
+                        >
+                            {!!!removeTasks.size?`Select all tasks`: `Unelect all tasks`}
+                            
                             </Button>
                     </Col>
                 </Row>
