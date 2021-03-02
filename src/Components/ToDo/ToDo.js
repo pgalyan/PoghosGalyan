@@ -102,7 +102,7 @@ class ToDo extends Component {
                         task={task}
                         handleDeleteOneTask={this.handleDeleteOneTask}
                         toggleSetRemoveTaskId={this.toggleSetRemoveTaskId}
-                        disabled={!!!removeTasks.size}
+                        disabled={!!removeTasks.size}
                         checked={removeTasks.has(task.id)}
                     />
                 </Col>

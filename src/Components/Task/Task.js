@@ -32,6 +32,7 @@ class Task extends React.PureComponent {
     const { task,
       handleDeleteOneTask,
       toggleSetRemoveTaskId,
+      disabled,
       checked } = this.props
 
     return (
@@ -45,7 +46,7 @@ class Task extends React.PureComponent {
         </InputGroup.Prepend>
         <Card.Body>
           <Card.Title>{task.title}</Card.Title>
-          <Button variant="danger" onClick={() => handleDeleteOneTask(task.id)} >Del</Button>
+          <Button variant="danger" onClick={() => handleDeleteOneTask(task.id)} disabled={disabled} >Del</Button>
         </Card.Body>
       </Card >
     )
