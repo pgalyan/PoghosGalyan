@@ -3,67 +3,88 @@ import { InputGroup, Button, FormControl, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 class AddTask extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.inputRef = React.createRef()
         this.state = {
-            inputValue: ''
+            title: '',
+            description: ''
         }
     }
-    
-    
 
     handleChange = (event) => {
-        const { value } = event.target
+        const { name ,  value } = event.target
         this.setState({
-            inputValue: value
+            [name]: value
         })
     }
 
     hendelChangeKey = ({ key, type }) => {
         if (type === 'keypress' && key !== 'Enter') return
 
-        const { inputValue } = this.state
+        const { title, description } = this.state
         const { handleSubmit } = this.props
-
-        handleSubmit(inputValue)
+        const data = {
+            title,
+            description
+        }
+      
+        handleSubmit(data)
+        
         this.setState({
-            inputValue: ''
+            title: '',
+            description: ''
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.inputRef.current.focus();
     }
 
     render() {
 
-        const { inputValue } = this.state
+        const { title } = this.state
+        const { description} = this.state
         const { disabled } = this.props
 
 
         return (
             <Col xs={12} md={6} lg={4}>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        type='text'
-                        onChange={this.handleChange}
-                        onKeyPress={this.hendelChangeKey}
-                        placeholder="Task title"
-                        value={inputValue}
-                        disabled={disabled}
-                        ref={this.inputRef}
-                    />
-                    <InputGroup.Append>
+                <InputGroup className=" flex-column mb-3">
+                    <div className=" justify-content-md-center ">
+                        <FormControl
+                            name="title"
+                            type='text'
+                            onChange={this.handleChange}
+                            onKeyPress={this.hendelChangeKey}
+                            placeholder="Task title"
+                            value={title}
+                            disabled={disabled}
+                            ref={this.inputRef}
+                        />
+                        <FormControl
+                            name="description"
+                            className="my-3 resize-none"
+                            as="textarea"
+                            onChange={this.handleChange}
+                            aria-label="With textarea"
+                            placeholder="Task description"
+                            style={{resize: "none" }}
+                            value={description}
+                            disabled={disabled}
+                        />
+
                         <Button
                             variant="outline-secondary"
                             onClick={this.hendelChangeKey}
-                            disabled={!!!inputValue}
+                            disabled={!(!!title && !!description)}
                         >
                             Add task
                             </Button>
 
-                    </InputGroup.Append>
+
+                    </div>
+
                 </InputGroup>
             </Col>
         )
@@ -73,7 +94,7 @@ class AddTask extends React.Component {
 AddTask.prototypes = {
     handleSubmit: PropTypes.func,
     disabled: PropTypes.bool.isRequired
-  }
+}
 
 
 export default AddTask

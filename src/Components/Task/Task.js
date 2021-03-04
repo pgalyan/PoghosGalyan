@@ -33,7 +33,9 @@ class Task extends React.PureComponent {
       handleDeleteOneTask,
       toggleSetRemoveTaskId,
       disabled,
-      checked } = this.props
+      checked,
+      hendleSetEditTask
+    } = this.props
 
     return (
 
@@ -46,7 +48,19 @@ class Task extends React.PureComponent {
         </InputGroup.Prepend>
         <Card.Body>
           <Card.Title>{task.title}</Card.Title>
-          <Button variant="danger" onClick={() => handleDeleteOneTask(task.id)} disabled={disabled} >Del</Button>
+          <Card.Text>
+            {task.description}
+          </Card.Text>
+          <Button
+            variant="danger"
+            onClick={() => handleDeleteOneTask(task.id)}
+            disabled={disabled} >Del</Button>
+          <Button
+            variant="warning"
+            className="ml-2"
+            onClick = { ()=> hendleSetEditTask(task)}
+
+          >Edit</Button>
         </Card.Body>
       </Card >
     )

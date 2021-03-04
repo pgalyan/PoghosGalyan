@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import Task from '../Task/Task.js'
 import AddTask from "../AddTask/AddNewTask"
-import { Container, Row, Col, Button} from 'react-bootstrap'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen'
+import TaskDeleteConfirm from '../TaskDeleteConfirm/TaskDeleteConfirm'
+import TaskEditModal from '../TaskEditModal/TaskEditModal'
 // import PropTypes from 'prop-types'
 
 class ToDo extends Component {
@@ -11,25 +13,32 @@ class ToDo extends Component {
             {
                 id: IdGenerator(),
                 title: 'title 1',
+                description: 'bla1 bla1 bla1 bla1'
             },
             {
                 id: IdGenerator(),
                 title: 'title 2',
+                description: 'bla2 bla2 bla2'
             },
             {
                 id: IdGenerator(),
                 title: 'title 3',
+                description: 'bla3 bla3 bla 3 '
             }
         ],
-        removeTasks: new Set()
+        removeTasks: new Set(),
+        isConfirmModal: false,
+        EditTaskData: null,
     }
 
-    handleSubmit = (value) => {
-        if (!value) return;
+    handleSubmit = (data) => {
+        if (!data.title || !data.description) return;
         const tasks = [...this.state.tasks]
         tasks.push({
             id: IdGenerator(),
-            title: value,
+            title: data.title,
+            description: data.description,
+
         })
         this.setState({
             tasks
@@ -84,8 +93,37 @@ class ToDo extends Component {
 
     }
 
+    handleToggleOpenModal = () => {
+        this.setState({
+            isConfirmModal: !this.state.isConfirmModal
+        });
+    }
+
+    hendleSetEditTask = (task) =>{
+        this.setState({
+            EditTaskData: task
+        })
+    }
+
+    setEditeTableDataNull = ()=>{
+        this.setState({
+            EditTaskData: null
+        })
+    }
+
+    hendleEditTask = (editedTask)=>{
+        const tasks =[...this.state.tasks]
+        const index = tasks.findIndex(tasks => tasks.id === editedTask.id)
+        tasks[index] = editedTask
+        this.setState({
+            tasks
+        })
+    }
+
     render() {
         const removeTasks = new Set(this.state.removeTasks)
+
+        const{isConfirmModal , EditTaskData} = this.state
 
 
         const Tasks = this.state.tasks.map((task) => {
@@ -104,6 +142,7 @@ class ToDo extends Component {
                         toggleSetRemoveTaskId={this.toggleSetRemoveTaskId}
                         disabled={!!removeTasks.size}
                         checked={removeTasks.has(task.id)}
+                        hendleSetEditTask={this.hendleSetEditTask}
                     />
                 </Col>
             )
@@ -111,14 +150,15 @@ class ToDo extends Component {
 
 
         return (
-            <Container>
-                <Row className="justify-content-md-center mt-3">
-                    <AddTask
-                        handleSubmit={this.handleSubmit}
-                        disabled={!!removeTasks.size}
-                    />
-                </Row>
-                {/* <Row className="justify-content-md-center mt-3 mb-3">
+            <>
+                <Container>
+                    <Row className=" justify-content-md-center mt-3">
+                        <AddTask
+                            handleSubmit={this.handleSubmit}
+                            disabled={!!removeTasks.size}
+                        />
+                    </Row>
+                    {/* <Row className="justify-content-md-center mt-3 mb-3">
                     <InputGroup.Prepend  >
                         <InputGroup.Checkbox
                             onChange={this.toggleSetSelectAllTasks}
@@ -127,33 +167,55 @@ class ToDo extends Component {
                         <div> Select all tassks</div>
                     </InputGroup.Prepend>
                 </Row> */}
-                <Row className="justify-content-md-center">
-                    {!Tasks.length && <div>Tasks is Empty</div>}
+                    <Row className="justify-content-md-center">
+                        {!Tasks.length && <div>Tasks is Empty</div>}
 
-                    {Tasks}
+                        {Tasks}
 
-                </Row>
-                <Row className="justify-content-md-center mt-2 ">
-                    <Col>
-                        <Button
-                            className="mr-2"
-                            variant="danger"
-                            onClick={this.removeSelectedTasks}
-                            disabled={!!!removeTasks.size}
-                        >
-                            Remove Selected
+                    </Row>
+                    <Row className="justify-content-md-center mt-2 ">
+                        <Col>
+                            <Button
+                                className="mr-2"
+                                variant="danger"
+                                onClick={this.handleToggleOpenModal}
+                                disabled={!!!removeTasks.size}
+                            >
+                                Remove Selected
                             </Button>
 
-                        <Button
-                         onClick={this.toggleSetSelectAllTasks}
-                         disabled={!!!this.state.tasks.length}
-                        >
-                            {!!!removeTasks.size?`Select all tasks`: `Unelect all tasks`}
-                            
+                            <Button
+                                onClick={this.toggleSetSelectAllTasks}
+                                disabled={!!!this.state.tasks.length}
+                            >
+                                {!!!removeTasks.size ? `Select all tasks` : `Unelect all tasks`}
+
                             </Button>
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+
+                {
+                    isConfirmModal && <TaskDeleteConfirm
+                        onHide={this.handleToggleOpenModal}
+                        onSubmit={this.removeSelectedTasks}
+                        selectedTasks={removeTasks.size}
+                    />
+
+                }
+
+                 {
+                    EditTaskData && <TaskEditModal
+                    EditTaskData={EditTaskData}
+                    onHide={this.setEditeTableDataNull}
+                    onSubmit={this.hendleEditTask}
+                    
+                    />
+
+                } 
+
+
+            </>
         )
     }
 
