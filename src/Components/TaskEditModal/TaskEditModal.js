@@ -5,25 +5,35 @@ class TaskEditModal extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+
             ...props.EditTaskData
             //_id,
             //title,
             //description
+
+
         }
     }
 
-    handleChange = (e) => {
-        const {name, value} = e.target
+
+
+    handleChange = (event) => {
+        const { name, value } = event.target
 
         this.setState({
             [name]: value
         })
     }
 
-    hendleS = ({type, key}) => {
+    hendleS = ({ type, key }) => {
         if (type === 'keypress' && key !== 'Enter') return
-        const { onSubmit, onHide } = this.props
-        onSubmit(this.state)
+        const { onSubmit, onHide, AddNewTask , handleSubmit} = this.props
+        if(AddNewTask === false){
+            onSubmit(this.state)
+        }else{
+            handleSubmit(this.state)
+        }
+        
         onHide()
     }
 
@@ -31,7 +41,7 @@ class TaskEditModal extends React.Component {
 
 
     render() {
-        const { onHide } = this.props
+        const { onHide, AddNewTask } = this.props
         return (
             <Modal
                 show={true}
@@ -42,7 +52,7 @@ class TaskEditModal extends React.Component {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Edit task
+                        {AddNewTask? `Add New Task`: `Edit Task`}
         </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='d-flex justify-content-md-center'>

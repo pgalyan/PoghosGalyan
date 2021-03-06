@@ -29,6 +29,7 @@ class ToDo extends Component {
         removeTasks: new Set(),
         isConfirmModal: false,
         EditTaskData: null,
+        AddNewTask:false
     }
 
     handleSubmit = (data) => {
@@ -38,6 +39,7 @@ class ToDo extends Component {
             id: IdGenerator(),
             title: data.title,
             description: data.description,
+            AddNewTask:false
 
         })
         this.setState({
@@ -107,7 +109,8 @@ class ToDo extends Component {
 
     setEditeTableDataNull = ()=>{
         this.setState({
-            EditTaskData: null
+            EditTaskData: null,
+            AddNewTask:false
         })
     }
 
@@ -120,10 +123,17 @@ class ToDo extends Component {
         })
     }
 
+    hendleAddNewTask = ()=>{
+        this.setState({
+            AddNewTask: true,
+            EditTaskData: true
+        })
+    }
+
     render() {
         const removeTasks = new Set(this.state.removeTasks)
 
-        const{isConfirmModal , EditTaskData} = this.state
+        const{isConfirmModal , EditTaskData , AddNewTask} = this.state
 
 
         const Tasks = this.state.tasks.map((task) => {
@@ -152,12 +162,22 @@ class ToDo extends Component {
         return (
             <>
                 <Container>
-                    <Row className=" justify-content-md-center mt-3">
+                    <Row className=" justify-content-md-center mt-3 mb-3">
+                    <Button
+                            variant="outline-secondary"
+                            onClick={this.hendleAddNewTask}
+                            disabled={!!removeTasks.size}
+                        >
+                            Add task
+                            </Button>
+                    </Row>
+
+                    {/* <Row className=" justify-content-md-center mt-3">
                         <AddTask
                             handleSubmit={this.handleSubmit}
                             disabled={!!removeTasks.size}
                         />
-                    </Row>
+                    </Row> */}
                     {/* <Row className="justify-content-md-center mt-3 mb-3">
                     <InputGroup.Prepend  >
                         <InputGroup.Checkbox
@@ -200,6 +220,7 @@ class ToDo extends Component {
                         onHide={this.handleToggleOpenModal}
                         onSubmit={this.removeSelectedTasks}
                         selectedTasks={removeTasks.size}
+                        
                     />
 
                 }
@@ -209,10 +230,18 @@ class ToDo extends Component {
                     EditTaskData={EditTaskData}
                     onHide={this.setEditeTableDataNull}
                     onSubmit={this.hendleEditTask}
+                    AddNewTask={AddNewTask}
+                    handleSubmit={this.handleSubmit}
                     
                     />
 
                 } 
+                {/* {
+                    AddNewTask && <TaskEditModal
+
+                    />
+                } */}
+                
 
 
             </>
