@@ -2,66 +2,83 @@ import React, { Component } from 'react'
 import Task from '../Task/Task.js'
 // import AddTask from "../AddTask/AddNewTask"
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import IdGenerator from '../../Helpers/IdGen'
+// import IdGenerator from '../../Helpers/IdGen'
 import TaskDeleteConfirm from '../TaskDeleteConfirm/TaskDeleteConfirm'
-import TaskEditModal from '../TaskEditModal/TaskEditModal'
+import TaskEditModal from '../TaskModal/TaskModal'
 // import PropTypes from 'prop-types'
+import dateFormatter from '../../Helpers/date'
 
 class ToDo extends Component {
     state = {
-        tasks: [
-            {
-                id: IdGenerator(),
-                title: 'title 1',
-                description: 'bla1 bla1 bla1 bla1'
-            },
-            {
-                id: IdGenerator(),
-                title: 'title 2',
-                description: 'bla2 bla2 bla2'
-            },
-            {
-                id: IdGenerator(),
-                title: 'title 3',
-                description: 'bla3 bla3 bla 3 '
-            }
-        ],
+        tasks: [],
         removeTasks: new Set(),
         isConfirmModal: false,
-        EditTaskData: null,
-        AddNewTask:false
+        editTaskData: null,
+        AddNewTask: false
     }
 
-    handleSubmit = (data) => {
-        if (!data.title || !data.description) return;
+    handleSubmit = (formdata) => {
+        if (!formdata.title || !formdata.description)
+            return;
+        formdata.date = dateFormatter(formdata.date)
         const tasks = [...this.state.tasks]
-        tasks.push({
-            id: IdGenerator(),
-            title: data.title,
-            description: data.description,
-            AddNewTask:false
-
+        fetch("http://localhost:3001/task", {
+            method: "POST",
+            body: JSON.stringify(formdata),
+            headers: {
+                "Content-type": "application/json"
+            }
         })
-        this.setState({
-            tasks
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                tasks.push(data);
+                this.setState({
+                    tasks
+                });
+            })
+            .catch(error => {
+                console.log("catch-error", error)
+            })
+
     }
 
-    handleDeleteOneTask = (id) => {
+    handleDeleteOneTask = (_id) => {
+
         let tasks = [...this.state.tasks]
-        tasks = tasks.filter(item => item.id !== id)
-        this.setState({
-            tasks
-        });
+        fetch("http://localhost:3001/task/" + _id, {
+            method: "DELETE",
+            // body: JSON.stringify(formdata),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                tasks = tasks.filter(item => item._id !== _id)
+                this.setState({
+                    tasks
+                });
+            })
+            .catch(error => {
+                console.log("catch-error", error)
+            })
+
+
     }
 
-    toggleSetRemoveTaskId = (id) => {
+    toggleSetRemoveTaskId = (_id) => {
         let removeTasks = new Set(this.state.removeTasks)
 
-        if (removeTasks.has(id)) {
-            removeTasks.delete(id)
+        if (removeTasks.has(_id)) {
+            removeTasks.delete(_id)
         } else {
-            removeTasks = removeTasks.add(id)
+            removeTasks = removeTasks.add(_id)
         }
         this.setState({
             removeTasks
@@ -76,7 +93,7 @@ class ToDo extends Component {
             removeTasks.clear()
         } else {
             for (let key in tasks) {
-                removeTasks.add(tasks[key].id)
+                removeTasks.add(tasks[key]._id)
             }
         }
         this.setState({
@@ -85,13 +102,26 @@ class ToDo extends Component {
     }
 
     removeSelectedTasks = () => {
-        let tasks = [...this.state.tasks]
-        let removeTasks = new Set(this.state.removeTasks)
-        tasks = tasks.filter(item => !removeTasks.has(item.id))
-        this.setState({
-            tasks,
-            removeTasks: new Set()
+        fetch("http://localhost:3001/task", {
+            method: "PATCH",
+            body: JSON.stringify({ tasks: Array.from(this.state.removeTasks) }),
+            headers: {
+                "Content-type": "application/json"
+            }
         })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                let tasks = [...this.state.tasks]
+                let removeTasks = new Set(this.state.removeTasks)
+                tasks = tasks.filter(item => !removeTasks.has(item._id))
+                this.setState({
+                    tasks,
+                    removeTasks: new Set()
+                })
+            })
 
     }
 
@@ -101,39 +131,76 @@ class ToDo extends Component {
         });
     }
 
-    hendleSetEditTask = (task) =>{
+    hendleSetEditTask = (task) => {
+
         this.setState({
-            EditTaskData: task
+            editTaskData: task
+        })
+        // console.log('editTaskData',editTaskData)
+    }
+
+    setEditeTableDataNull = () => {
+        this.setState({
+            editTaskData: null,
+            AddNewTask: false
         })
     }
 
-    setEditeTableDataNull = ()=>{
-        this.setState({
-            EditTaskData: null,
-            AddNewTask:false
+    hendleEditTask = (editedTask) => {
+        // console.log('editedTask',editedTask);
+
+        fetch("http://localhost:3001/task/" + editedTask._id, {
+            method: "PUT",
+            body: JSON.stringify(editedTask),
+            headers: {
+                "Content-type": "application/json"
+            }
         })
+            .then(res => res.json())
+            .then(data => {
+                // console.log('data',data);
+                if (data.error) {
+                    throw data.error
+                }
+                const tasks = [...this.state.tasks]
+                const index = tasks.findIndex(el => el._id === data._id)
+                tasks[index] = data
+                this.setState({
+                    tasks
+                })    
+            })
+            .catch(error => {
+                console.log('error', error);
+            })
     }
 
-    hendleEditTask = (editedTask)=>{
-        const tasks =[...this.state.tasks]
-        const index = tasks.findIndex(tasks => tasks.id === editedTask.id)
-        tasks[index] = editedTask
-        this.setState({
-            tasks
-        })
-    }
-
-    hendleAddNewTask = ()=>{
+    hendleAddNewTask = () => {
         this.setState({
             AddNewTask: true,
-            EditTaskData: true
+            editTaskData: true
         })
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:3001/task")
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                this.setState({
+                    tasks: data
+                })
+            })
+            .catch(error => {
+                console.log("Get tasks request error", error)
+            })
     }
 
     render() {
         const removeTasks = new Set(this.state.removeTasks)
 
-        const{isConfirmModal , EditTaskData , AddNewTask} = this.state
+        const { isConfirmModal, editTaskData, AddNewTask } = this.state
 
 
         const Tasks = this.state.tasks.map((task) => {
@@ -143,7 +210,7 @@ class ToDo extends Component {
                     md={4}
                     lg={3}
                     className='mr-3 mb-3'
-                    key={task.id}
+                    key={task._id}
 
                 >
                     <Task
@@ -151,7 +218,7 @@ class ToDo extends Component {
                         handleDeleteOneTask={this.handleDeleteOneTask}
                         toggleSetRemoveTaskId={this.toggleSetRemoveTaskId}
                         disabled={!!removeTasks.size}
-                        checked={removeTasks.has(task.id)}
+                        checked={removeTasks.has(task._id)}
                         hendleSetEditTask={this.hendleSetEditTask}
                     />
                 </Col>
@@ -163,7 +230,7 @@ class ToDo extends Component {
             <>
                 <Container>
                     <Row className=" justify-content-md-center mt-3 mb-3">
-                    <Button
+                        <Button
                             variant="outline-secondary"
                             onClick={this.hendleAddNewTask}
                             disabled={!!removeTasks.size}
@@ -220,28 +287,28 @@ class ToDo extends Component {
                         onHide={this.handleToggleOpenModal}
                         onSubmit={this.removeSelectedTasks}
                         selectedTasks={removeTasks.size}
-                        
+
                     />
 
                 }
 
-                 {
-                    EditTaskData && <TaskEditModal
-                    EditTaskData={EditTaskData}
-                    onHide={this.setEditeTableDataNull}
-                    onSubmit={this.hendleEditTask}
-                    AddNewTask={AddNewTask}
-                    handleSubmit={this.handleSubmit}
-                    
+                {
+                    editTaskData && <TaskEditModal
+                        editTaskData={editTaskData}
+                        onHide={this.setEditeTableDataNull}
+                        onSubmit={this.hendleEditTask}
+                        AddNewTask={AddNewTask}
+                        handleSubmit={this.handleSubmit}
+
                     />
 
-                } 
+                }
                 {/* {
                     AddNewTask && <TaskEditModal
 
                     />
                 } */}
-                
+
 
 
             </>

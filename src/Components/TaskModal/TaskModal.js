@@ -1,7 +1,9 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
+import DatePicker from "react-datepicker";
+import dateFormatter from '../../Helpers/date'
 
-class TaskEditModal extends React.Component {
+class TaskModal extends React.Component {
     constructor(props) {
         super(props)
         this.myRef = React.createRef()
@@ -11,17 +13,22 @@ class TaskEditModal extends React.Component {
         //     //title,
         //     //description
         // }
-        const editableTask = props.editableTask ? { ...props.editableTask } : {}; //vor null grem {} texy error kta spreed i jamanak
+        const editTaskData = props.editTaskData ? { ...props.editTaskData } : {}; 
         this.state = {
+            _id: '',
             title: '',
             description: '',
-            _id: '',
-            ...editableTask
+            date: editTaskData? new Date(editTaskData.date) : new Date(),
+            ...editTaskData
         }
 
     }
-
-
+    hendleSetDate =(date)=>{
+        
+        this.setState({
+            date
+        })
+    }
 
     handleChange = (event) => {
         const { name, value } = event.target
@@ -34,10 +41,13 @@ class TaskEditModal extends React.Component {
     hendleS = ({ type, key }) => {
         if (type === 'keypress' && key !== 'Enter') return
         const { onSubmit, onHide, AddNewTask , handleSubmit} = this.props
+        const formData = this.state
+        formData.date = dateFormatter(formData.date)
+
         if(AddNewTask === false){
-            onSubmit(this.state)
+            onSubmit(formData)
         }else{
-            handleSubmit(this.state)
+            handleSubmit(formData)
         }
             onHide()
     }
@@ -46,11 +56,9 @@ class TaskEditModal extends React.Component {
         this.myRef.current.focus()
     }
 
-
-
-
     render() {
         const { onHide, AddNewTask } = this.props
+        const { title, description, date } = this.state;
         return (
             <Modal
                 show={true}
@@ -72,7 +80,7 @@ class TaskEditModal extends React.Component {
                             onChange={this.handleChange}
                             onKeyPress={this.hendelChangeKey}
                             placeholder="Task title"
-                            value={this.state.title}
+                            value={title}
                             // disabled={disabled}
                             ref={this.myRef}
                         />
@@ -84,9 +92,12 @@ class TaskEditModal extends React.Component {
                             aria-label="With textarea"
                             placeholder="Task description"
                             style={{ resize: "none" }}
-                            value={this.state.description}
+                            value={description}
                         // disabled={disabled}
                         />
+                        <DatePicker 
+                        selected={new Date(date)} 
+                        onChange={date => this.hendleSetDate(date)} />
                     </div>
 
                 </Modal.Body>
@@ -102,4 +113,4 @@ class TaskEditModal extends React.Component {
 
 }
 
-export default TaskEditModal
+export default TaskModal
