@@ -4,15 +4,21 @@ import { Modal, Button, FormControl } from 'react-bootstrap'
 class TaskEditModal extends React.Component {
     constructor(props) {
         super(props)
+        this.myRef = React.createRef()
+        // this.state = {
+        //     ...props.EditTaskData
+        //     //_id,
+        //     //title,
+        //     //description
+        // }
+        const editableTask = props.editableTask ? { ...props.editableTask } : {}; //vor null grem {} texy error kta spreed i jamanak
         this.state = {
-
-            ...props.EditTaskData
-            //_id,
-            //title,
-            //description
-
-
+            title: '',
+            description: '',
+            _id: '',
+            ...editableTask
         }
+
     }
 
 
@@ -33,8 +39,11 @@ class TaskEditModal extends React.Component {
         }else{
             handleSubmit(this.state)
         }
-        
-        onHide()
+            onHide()
+    }
+
+    componentDidMount() {
+        this.myRef.current.focus()
     }
 
 
@@ -56,7 +65,7 @@ class TaskEditModal extends React.Component {
         </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='d-flex justify-content-md-center'>
-                    <div Style={'width:100%'}>
+                    <div style={{width:'100%'}}>
                         <FormControl
                             name="title"
                             type='text'
@@ -65,7 +74,7 @@ class TaskEditModal extends React.Component {
                             placeholder="Task title"
                             value={this.state.title}
                             // disabled={disabled}
-                            ref={this.inputRef}
+                            ref={this.myRef}
                         />
                         <FormControl
                             name="description"

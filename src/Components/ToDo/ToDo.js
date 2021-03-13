@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Task from '../Task/Task.js'
-import AddTask from "../AddTask/AddNewTask"
+// import AddTask from "../AddTask/AddNewTask"
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import IdGenerator from '../../Helpers/IdGen'
 import TaskDeleteConfirm from '../TaskDeleteConfirm/TaskDeleteConfirm'
