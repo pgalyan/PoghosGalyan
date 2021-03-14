@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar/NavBar'
 import Contact from './Components/pages/Contact/Contact'
 import About from './Components/pages/About/About'
 import { Redirect, Route , Switch } from 'react-router-dom';
-
+import SingleTask from './Components/pages/SingleTask/SingleTask'
 
 
 function App() {
@@ -22,10 +22,9 @@ function App() {
         <Route path="/about" exact>
           <About />
         </Route>
+        <Route path="/task/:id" component={SingleTask} exact />
         <Redirect to="/" />
       </Switch>
-      
-
     </div>
   );
 }

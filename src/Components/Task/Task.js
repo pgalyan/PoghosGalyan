@@ -3,33 +3,10 @@ import Styles from './Task.module.css'
 import { Card, Button, InputGroup } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import dateFormatter from '../../Helpers/date'
-
-
-// const Task = ({ task , handleDeleteOneTask,toggleSetRemoveTaskId, checked }) => {
-
-//   return (
-
-//     <Card  className={`${Styles.tasks} ${checked && Styles.checked}`}>
-//       <InputGroup.Prepend className='justify-content-rigth mt-1 ml-1'>
-//         <InputGroup.Checkbox onClick= {()=> toggleSetRemoveTaskId(task.id)} checked={checked && true}  />
-//       </InputGroup.Prepend>
-//       <Card.Body>
-//         <Card.Title>{task.title}</Card.Title>
-//         <Button variant="danger" onClick={()=>handleDeleteOneTask(task.id)} >Del</Button>
-//       </Card.Body>
-//     </Card>
-
-//   )
-// }
-
+import {NavLink} from 'react-router-dom'
 
 class Task extends React.PureComponent {
-
-
-
   render() {
-
-    // console.log('render')
     const { task,
       handleDeleteOneTask,
       toggleSetRemoveTaskId,
@@ -48,7 +25,10 @@ class Task extends React.PureComponent {
           />
         </InputGroup.Prepend>
         <Card.Body>
-          <Card.Title>{task.title}</Card.Title>
+          <NavLink to={`/task/${task._id}`}>
+            <Card.Title>{task.title}</Card.Title>
+          </NavLink>
+          
           <Card.Text>
             {task.description}
           </Card.Text>
@@ -66,8 +46,7 @@ class Task extends React.PureComponent {
             variant="warning"
             className="ml-2"
             onClick={() => hendleSetEditTask(task)}
-            disabled={disabled} 
-          >Edit</Button>
+            disabled={disabled} >Edit</Button>
         </Card.Body>
       </Card >
     )

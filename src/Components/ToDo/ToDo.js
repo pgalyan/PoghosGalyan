@@ -289,7 +289,6 @@ class ToDo extends Component {
                         selectedTasks={removeTasks.size}
 
                     />
-
                 }
 
                 {
@@ -303,13 +302,6 @@ class ToDo extends Component {
                     />
 
                 }
-                {/* {
-                    AddNewTask && <TaskEditModal
-
-                    />
-                } */}
-
-
 
             </>
         )
