@@ -18,7 +18,7 @@ class TaskModal extends React.Component {
             _id: '',
             title: '',
             description: '',
-            date: editTaskData? new Date(editTaskData.date) : new Date(),
+            date: editTaskData.date? new Date(editTaskData.date) : new Date(),
             ...editTaskData
         }
 
