@@ -46,10 +46,12 @@ class TaskModal extends React.Component {
 
         if(AddNewTask === false){
             onSubmit(formData)
+            onHide()
         }else{
             handleSubmit(formData)
-        }
             onHide()
+        }
+            
     }
 
     componentDidMount() {

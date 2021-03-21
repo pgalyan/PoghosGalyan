@@ -7,6 +7,7 @@ import TaskDeleteConfirm from '../TaskDeleteConfirm/TaskDeleteConfirm'
 import TaskEditModal from '../TaskModal/TaskModal'
 // import PropTypes from 'prop-types'
 import dateFormatter from '../../Helpers/date'
+import Preloader from '../Preloader/Preloader'
 
 class ToDo extends Component {
     state = {
@@ -14,10 +15,14 @@ class ToDo extends Component {
         removeTasks: new Set(),
         isConfirmModal: false,
         editTaskData: null,
-        AddNewTask: false
+        AddNewTask: false,
+        loading: false
     }
 
     handleSubmit = (formdata) => {
+        this.setState({
+            loading: true
+        })
         if (!formdata.title || !formdata.description)
             return;
         formdata.date = dateFormatter(formdata.date)
@@ -42,10 +47,18 @@ class ToDo extends Component {
             .catch(error => {
                 console.log("catch-error", error)
             })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                })
+            })
 
     }
 
     handleDeleteOneTask = (_id) => {
+        this.setState({
+            loading: true
+        })
 
         let tasks = [...this.state.tasks]
         fetch("http://localhost:3001/task/" + _id, {
@@ -67,6 +80,11 @@ class ToDo extends Component {
             })
             .catch(error => {
                 console.log("catch-error", error)
+            })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                })
             })
 
 
@@ -102,6 +120,9 @@ class ToDo extends Component {
     }
 
     removeSelectedTasks = () => {
+        this.setState({
+            loading: true
+        })
         fetch("http://localhost:3001/task", {
             method: "PATCH",
             body: JSON.stringify({ tasks: Array.from(this.state.removeTasks) }),
@@ -122,6 +143,11 @@ class ToDo extends Component {
                     removeTasks: new Set()
                 })
             })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                })
+            })
 
     }
 
@@ -136,7 +162,6 @@ class ToDo extends Component {
         this.setState({
             editTaskData: task
         })
-        // console.log('editTaskData',editTaskData)
     }
 
     setEditeTableDataNull = () => {
@@ -147,7 +172,10 @@ class ToDo extends Component {
     }
 
     hendleEditTask = (editedTask) => {
-        // console.log('editedTask',editedTask);
+        this.setState({
+            loading: true
+        })
+     
 
         fetch("http://localhost:3001/task/" + editedTask._id, {
             method: "PUT",
@@ -167,11 +195,17 @@ class ToDo extends Component {
                 tasks[index] = data
                 this.setState({
                     tasks
-                })    
+                })
             })
             .catch(error => {
                 console.log('error', error);
             })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                })
+            })
+            
     }
 
     hendleAddNewTask = () => {
@@ -182,6 +216,9 @@ class ToDo extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            loading: true
+        })
         fetch("http://localhost:3001/task")
             .then(res => res.json())
             .then(data => {
@@ -189,18 +226,27 @@ class ToDo extends Component {
                     throw data.error
                 }
                 this.setState({
-                    tasks: data
+                    tasks: data,
+                    loading: false
                 })
             })
             .catch(error => {
                 console.log("Get tasks request error", error)
+
+            })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                })
             })
     }
 
     render() {
         const removeTasks = new Set(this.state.removeTasks)
 
-        const { isConfirmModal, editTaskData, AddNewTask } = this.state
+        const { isConfirmModal, editTaskData, AddNewTask, tasks, loading } = this.state
+
+
 
 
         const Tasks = this.state.tasks.map((task) => {
@@ -226,6 +272,8 @@ class ToDo extends Component {
         })
 
 
+
+
         return (
             <>
                 <Container>
@@ -238,24 +286,9 @@ class ToDo extends Component {
                             Add task
                             </Button>
                     </Row>
-
-                    {/* <Row className=" justify-content-md-center mt-3">
-                        <AddTask
-                            handleSubmit={this.handleSubmit}
-                            disabled={!!removeTasks.size}
-                        />
-                    </Row> */}
-                    {/* <Row className="justify-content-md-center mt-3 mb-3">
-                    <InputGroup.Prepend  >
-                        <InputGroup.Checkbox
-                            onChange={this.toggleSetSelectAllTasks}
-                            checked={!!removeTasks.size}
-                        />
-                        <div> Select all tassks</div>
-                    </InputGroup.Prepend>
-                </Row> */}
                     <Row className="justify-content-md-center">
-                        {!Tasks.length && <div>Tasks is Empty</div>}
+                        {loading && <Preloader />}
+                        {!Tasks.length && !loading && <div>Tasks is Empty</div>}
 
                         {Tasks}
 
