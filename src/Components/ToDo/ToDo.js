@@ -244,7 +244,7 @@ class ToDo extends Component {
     render() {
         const removeTasks = new Set(this.state.removeTasks)
 
-        const { isConfirmModal, editTaskData, AddNewTask, tasks, loading } = this.state
+        const { isConfirmModal, editTaskData, AddNewTask, loading } = this.state
 
 
 
