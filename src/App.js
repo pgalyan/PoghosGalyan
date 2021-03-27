@@ -8,6 +8,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import SingleTask from './Components/pages/SingleTask/SingleTask'
 import NotFound from './Components/pages/NotFound/NotFound'
 
+import ContactContextProvider from './Context/ContactPageContext'
+
 const pages = [
   {
     path: "/",
@@ -33,7 +35,25 @@ const pages = [
 
 
 function App() {
+
+
+
   const pagesRouts = pages.map((item, index) => {
+
+    if (item.path === "/contact") {
+      return <Route
+        path={item.path}
+        exact
+        key={index}
+        render={(props) => {
+          return (
+            <ContactContextProvider>
+              {<item.component {...props} />}
+            </ContactContextProvider>
+          );
+        }}
+      />
+    }
     return (
       <Route
         key={index}
