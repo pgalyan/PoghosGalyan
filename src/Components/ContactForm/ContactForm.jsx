@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Form } from 'react-bootstrap'
 import styles from './ContactForm.module.css'
 import { withRouter } from 'react-router-dom';
+import { isRequired, maxLength, minLength, emailValidation, isAllValid } from '../../Helpers/validators'
 
 const inputsInfo = [
     {
@@ -31,18 +32,69 @@ class ContactForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "",
-            email: "",
-            message: ""
+            name: {
+                value: "",
+                valid: false,
+                error: ""
+            },
+            email: {
+                value: "",
+                valid: false,
+                error: ""
+            },
+            message: {
+                value: "",
+                valid: false,
+                error: ""
+            },
+
+            errorMassage: "",
+            isValid: false
         }
     }
 
     hendleChange = (event) => {
         const { name, value } = event.target
-        // console.log('name', name)
-        // console.log('value', value)
+        let error = null
+        let valid = true
+        const maxLength16 = maxLength(16)
+        const minLength2 = minLength(2)
+        // if(isRequired(value)){
+        //     valid = false
+        //     error = isRequired(value)
+        // }else
+
+        // if(maxLength16(value)){
+        //     valid = false
+        //     error = maxLength16(value)
+        // }else
+
+        // if(minLength2(value)){
+        //     valid = false
+        //     error = minLength2(value)
+        // }
+
+
+        switch (name) {
+            case "name":
+            case "email":
+            case "message":
+                error = isRequired(value) ||
+                    (name === "email" && emailValidation(value)) ||
+                    minLength2(value) ||
+                    maxLength16(value);
+                break;
+            default: ;
+        }
+
+
         this.setState({
-            [name]: value
+            [name]: {
+                value,
+                valid: !!!error,
+                error
+            },
+            isValid: isAllValid(this.state)
         })
 
     }
@@ -50,6 +102,12 @@ class ContactForm extends React.Component {
 
     hendleSubmit = () => {
         const contactData = { ...this.state }
+
+        delete contactData.errorMassage
+
+        for (let key in contactData) {
+            contactData[key] = contactData[key].value
+        }
 
         fetch('http://localhost:3001/form', {
             method: 'POST',
@@ -66,6 +124,10 @@ class ContactForm extends React.Component {
                 this.props.history.push("/");
             })
             .catch(error => {
+                this.setState({
+                    errorMassage: error.massage
+                })
+
                 console.log("catch-error", error)
             })
     }
@@ -88,9 +150,10 @@ class ContactForm extends React.Component {
                         as={item.as}
                         placeholder={item.label}
                         onChange={this.hendleChange}
+                        value={this.state[item.name].value}
 
                     />
-                    <Form.Text className="text-muted"></Form.Text>
+                    <Form.Text className={styles.text} > {this.state[item.name].error}</Form.Text>
                 </Form.Group>
             )
         })
@@ -100,18 +163,23 @@ class ContactForm extends React.Component {
 
                 <Form onSubmit={(e) => e.preventDefault()} >
 
+                    <p style={{ color: "red", textTransform: "uppercase" }}>
+                        {this.state.errorMessage}
+                    </p>
+
                     {inputs}
 
                     <Button
                         variant="primary"
                         type="submit"
                         onClick={this.hendleSubmit}
+                        disabled={!this.state.isValid}
                     >
                         Send massage
                       </Button>
                 </Form>
 
-          </div>
+            </div>
         )
     }
 
