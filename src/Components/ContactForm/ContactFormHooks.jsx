@@ -49,7 +49,7 @@ const ContactFormHooks = (props) => {
 
     const [errorMessage , setErrormessage] = useState("")
 
-    hendleChange = (event) => {
+   const hendleChange = (event) => {
         const { name, value } = event.target
         let error = null
         let valid = true
@@ -90,7 +90,7 @@ const ContactFormHooks = (props) => {
     }
 
 
-    hendleSubmit = () => {
+    const hendleSubmit = () => {
         const contactData = { ...formData}
 
         // delete contactData.errorMassage
@@ -111,7 +111,7 @@ const ContactFormHooks = (props) => {
                 if (data.error) {
                     throw data.error
                 }
-                this.props.history.push("/");
+                props.history.push("/");
             })
             .catch(error => {
                 
@@ -130,11 +130,9 @@ const ContactFormHooks = (props) => {
 
 
 
-    const { name, email, message } = this.dataForm
+    const { name, email, message } = formData
 
-    // const {errorMessage} = errorMessage
-
-    // const isValid = name.valid && email.valid && message.valid
+    const isValid = name.valid && email.valid && message.valid
 
     const inputs = inputsInfo.map((item, index) => {
         return (
@@ -150,10 +148,10 @@ const ContactFormHooks = (props) => {
                     as={item.as}
                     placeholder={item.label}
                     onChange={hendleChange}
-                    value={dataForm[item.name].value}
+                    value={formData[item.name].value}
 
                 />
-                <Form.Text className={styles.text} > {dataForm[item.name].error}</Form.Text>
+                <Form.Text className={styles.text} > {formData[item.name].error}</Form.Text>
             </Form.Group>
         )
     })
