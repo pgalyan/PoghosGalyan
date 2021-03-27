@@ -48,8 +48,8 @@ class ContactForm extends React.Component {
                 error: ""
             },
 
-            errorMassage: "",
-            isValid: false
+            errorMessage: "",
+            
         }
     }
 
@@ -136,6 +136,11 @@ class ContactForm extends React.Component {
 
 
     render() {
+
+        const {name, email, message, errorMessage} = this.state
+
+        const isValid = name.valid && email.valid && message.valid
+
         const inputs = inputsInfo.map((item, index) => {
             return (
                 <Form.Group
@@ -164,7 +169,7 @@ class ContactForm extends React.Component {
                 <Form onSubmit={(e) => e.preventDefault()} >
 
                     <p style={{ color: "red", textTransform: "uppercase" }}>
-                        {this.state.errorMessage}
+                        {errorMessage}
                     </p>
 
                     {inputs}
@@ -173,7 +178,7 @@ class ContactForm extends React.Component {
                         variant="primary"
                         type="submit"
                         onClick={this.hendleSubmit}
-                        disabled={!this.state.isValid}
+                        disabled={!isValid}
                     >
                         Send massage
                       </Button>
