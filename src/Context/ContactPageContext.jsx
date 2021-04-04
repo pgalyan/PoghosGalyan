@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 import {
-    isRequired, maxLength, minLength, emailValidation, isAllValid } from '../Helpers/validators';
+    isRequired, maxLength, minLength, emailValidation} from '../Helpers/validators';
 import { withRouter } from 'react-router-dom';
 
 export const ContactContext = createContext();
@@ -30,7 +30,7 @@ const ContactContextProvider = (props) => {
     const hendleChange = (event) => {
         const { name, value } = event.target
         let error = null
-        let valid = true
+        // let valid = true
         const maxLength16 = maxLength(16)
         const minLength2 = minLength(2)
         switch (name) {

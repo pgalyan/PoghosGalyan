@@ -1,6 +1,6 @@
 import React from 'react'
 import ContactForm from '../../ContactForm/ContactForm'
-import ContactFormHooks from '../../ContactForm/ContactFormHooks'
+// import ContactFormHooks from '../../ContactForm/ContactFormHooks'
 
 class Contact extends React.Component{
     render(){
@@ -8,8 +8,8 @@ class Contact extends React.Component{
             <div>
                 <h1>Contact Us</h1>
 
-                {/* <ContactForm /> */}
-                <ContactFormHooks />
+                <ContactForm />
+                {/* <ContactFormHooks /> */}
             </div>
         )
     }

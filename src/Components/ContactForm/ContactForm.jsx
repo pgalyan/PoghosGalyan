@@ -2,7 +2,11 @@ import React from 'react'
 import { Button, Form } from 'react-bootstrap'
 import styles from './ContactForm.module.css'
 import { withRouter } from 'react-router-dom';
-import { isRequired, maxLength, minLength, emailValidation, isAllValid } from '../../Helpers/validators'
+// import { isRequired, maxLength, minLength, emailValidation, isAllValid } from '../../Helpers/validators'
+
+import actionTypes from '../../Redux/actionTypes'
+import { connect } from 'react-redux'
+
 
 const inputsInfo = [
     {
@@ -29,79 +33,11 @@ const inputsInfo = [
 ]
 
 class ContactForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            name: {
-                value: "",
-                valid: false,
-                error: ""
-            },
-            email: {
-                value: "",
-                valid: false,
-                error: ""
-            },
-            message: {
-                value: "",
-                valid: false,
-                error: ""
-            },
-
-            errorMessage: "",
-            
-        }
-    }
-
-    hendleChange = (event) => {
-        const { name, value } = event.target
-        let error = null
-        let valid = true
-        const maxLength16 = maxLength(16)
-        const minLength2 = minLength(2)
-        // if(isRequired(value)){
-        //     valid = false
-        //     error = isRequired(value)
-        // }else
-
-        // if(maxLength16(value)){
-        //     valid = false
-        //     error = maxLength16(value)
-        // }else
-
-        // if(minLength2(value)){
-        //     valid = false
-        //     error = minLength2(value)
-        // }
-
-
-        switch (name) {
-            case "name":
-            case "email":
-            case "message":
-                error = isRequired(value) ||
-                    (name === "email" && emailValidation(value)) ||
-                    minLength2(value) ||
-                    maxLength16(value);
-                break;
-            default: ;
-        }
-
-
-        this.setState({
-            [name]: {
-                value,
-                valid: !!!error,
-                error
-            },
-            isValid: isAllValid(this.state)
-        })
-
-    }
-
-
+    
     hendleSubmit = () => {
-        const contactData = { ...this.state }
+        const contactData = { ...this.props.state.contactFormState }
+
+        console.log('contact data', contactData)
 
         delete contactData.errorMassage
 
@@ -124,20 +60,25 @@ class ContactForm extends React.Component {
                 this.props.history.push("/");
             })
             .catch(error => {
-                this.setState({
-                    errorMassage: error.massage
-                })
+                this.props.contactError(error)
 
                 console.log("catch-error", error)
             })
     }
 
-
-
+    componentWillUnmount () {
+        this.props.contactStateReset()
+    }
 
     render() {
 
-        const {name, email, message, errorMessage} = this.state
+        const {
+            name,
+            email,
+            message,
+            errorMessage,
+            addContact
+        } = this.props
 
         const isValid = name.valid && email.valid && message.valid
 
@@ -154,11 +95,11 @@ class ContactForm extends React.Component {
                         type={item.type}
                         as={item.as}
                         placeholder={item.label}
-                        onChange={this.hendleChange}
-                        value={this.state[item.name].value}
+                        onChange={addContact}
+                        value={this.props[item.name].value}
 
                     />
-                    <Form.Text className={styles.text} > {this.state[item.name].error}</Form.Text>
+                    <Form.Text className={styles.text} > {this.props[item.name].error}</Form.Text>
                 </Form.Group>
             )
         })
@@ -187,12 +128,47 @@ class ContactForm extends React.Component {
             </div>
         )
     }
-
-
 }
 
 
-export default withRouter(ContactForm)
+const mapStateToProps = (state) => {
+    const {
+      name,
+      email,
+      message,
+      errorMessage
+    } = state.contactFormState
+    return {
+       name,
+       email,
+       message,
+       errorMessage,
+       state
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addContact: (event) => {
+            dispatch({ type: actionTypes.ADD_CONTACT, event });
+        },
+
+        contactError: (error) => {
+            dispatch({ type: actionTypes.CONTACT_ERROR, error });
+        },
+
+        contactStateReset: (error) => {
+            dispatch({ type: actionTypes.CONTACT_STATE_RESET, error });
+        },
+
+    }
+}
+
+
+const ContactFormProvider = connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+
+
+export default withRouter(ContactFormProvider)
 
 
 

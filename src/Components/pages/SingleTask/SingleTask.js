@@ -192,7 +192,7 @@ const SingleTask = (props) => {
                 console.error("Request error", error)
                 props.history.push('/')
             })
-    }, [])
+    }, [ props.history,props.match.params ])
 
 
 

@@ -8,8 +8,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import SingleTask from './Components/pages/SingleTask/SingleTask'
 import NotFound from './Components/pages/NotFound/NotFound'
 import ContactContextProvider from './Context/ContactPageContext'
-import ReduxCounter from './Demo/ReduxCounter'
-import ReduxInputResult from   './Demo/ReduxInputResult'
+// import ReduxCounter from './Demo/ReduxCounter'
+// import ReduxInputResult from   './Demo/ReduxInputResult'
 
 const pages = [
   {
@@ -67,14 +67,14 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Navbar />
+      <Navbar />
       <Switch>
         {pagesRouts}
         <Redirect to="/404"  />
-      </Switch> */}
+      </Switch>
 
-      <ReduxCounter />
-      <ReduxInputResult />
+      {/* <ReduxCounter />
+      <ReduxInputResult /> */}
     </div>
   );
 }
