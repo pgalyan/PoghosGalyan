@@ -137,7 +137,7 @@ const mapStateToProps = (state) => {
       email,
       message,
       errorMessage
-    } = state.contactFormState
+    } = state.someStates.contactFormState
     return {
        name,
        email,

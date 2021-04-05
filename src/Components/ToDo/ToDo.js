@@ -238,6 +238,7 @@ class ToDo extends Component {
     }
 }
 const mapStateToProps = (state) => {
+    console.log('todo state' , state)
     const {
         tasks,
         loading,
@@ -245,7 +246,7 @@ const mapStateToProps = (state) => {
         confirmDeleteModal,
         AddNewTask,
         editTaskData
-    } = state.todoState
+    } = state.someStates.todoState
     return {
         tasks,
         loading,
