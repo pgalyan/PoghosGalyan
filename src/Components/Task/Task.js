@@ -1,18 +1,22 @@
 import React from 'react'
 import Styles from './Task.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faCheckSquare, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import { Card, Button, InputGroup } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import dateFormatter from '../../Helpers/date'
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 class Task extends React.PureComponent {
   render() {
-    const { task,
+    const { 
+      task,
       handleDeleteOneTask,
       toggleSetRemoveTaskId,
       disabled,
       checked,
-      hendleSetEditTask
+      hendleSetEditTask,
+      toggleActiveTask
     } = this.props
 
     return (
@@ -28,7 +32,7 @@ class Task extends React.PureComponent {
           <NavLink to={`/task/${task._id}`}>
             <Card.Title>{task.title}</Card.Title>
           </NavLink>
-          
+
           <Card.Text>
             {task.description}
           </Card.Text>
@@ -47,6 +51,14 @@ class Task extends React.PureComponent {
             className="ml-2"
             onClick={() => hendleSetEditTask(task)}
             disabled={disabled} >Edit</Button>
+          <Button
+            variant="info"
+            className="ml-3"
+            disabled={disabled}
+            onClick={() => toggleActiveTask(task)}
+          >
+            <FontAwesomeIcon icon={task.status === "active" ? faHourglassHalf : faCheckSquare} />
+          </Button>
         </Card.Body>
       </Card >
     )

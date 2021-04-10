@@ -7,6 +7,10 @@ import dateFormatter from '../../Helpers/date'
 import Preloader from '../Preloader/Preloader'
 import actionTypes from '../../Redux/actionTypes'
 import { connect } from 'react-redux'
+import Search from  '../Search/Search'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ToDo extends Component {
 
@@ -28,6 +32,17 @@ class ToDo extends Component {
                     throw data.error
                 }
                 this.props.addTask(data)
+
+                toast.success('Your task has successfully added', {
+                    position: "top-right",
+                    autoClose: 6000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
             })
             .catch(error => {
                 console.log("catch-error", error)
@@ -35,6 +50,7 @@ class ToDo extends Component {
             .finally(() => {
                 this.props.toggleLoading(false)
             })
+
 
     }
 
@@ -77,7 +93,7 @@ class ToDo extends Component {
                 if (data.error) {
                     throw data.error
                 }
-               this.props.deleteSelectTasks()
+                this.props.deleteSelectTasks()
             })
             .finally(() => {
                 this.props.toggleLoading(false)
@@ -109,6 +125,29 @@ class ToDo extends Component {
 
     }
 
+    toggleActiveTask = (task) => {
+        const status = task.status === "active" ? "done" : "active";
+
+        fetch(`http://localhost:3001/task/${task._id}`, {
+            method: "PUT",
+            body: JSON.stringify({status}),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                this.props.toggleEditTaskStatus(data)
+            })
+            .catch(error => {
+                console.log('error', error);
+
+            })
+    }
+
     componentDidMount() {
         this.props.toggleLoading(true)
         fetch("http://localhost:3001/task")
@@ -126,6 +165,16 @@ class ToDo extends Component {
             .finally(() => {
                 this.props.toggleLoading(false)
             })
+
+        // toast.success('🦄 Welcome', {
+        //     position: "top-right",
+        //     autoClose: 5000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: undefined,
+        // });
     }
 
     render() {
@@ -137,7 +186,7 @@ class ToDo extends Component {
             confirmDeleteModal,
             editTaskData,
             AddNewTask,
-            
+
 
             //functions
             toggleSelectTask,
@@ -145,7 +194,10 @@ class ToDo extends Component {
             toggleOpenDeleteModal,
             toggleOpenAddtaskModal,
             toggleClosetaskModal,
-            toggleOpenEditTaskModal
+            toggleOpenEditTaskModal,
+            // toggleEditTaskStatus,
+            // toggleActiveTask
+
 
         } = this.props;
 
@@ -166,6 +218,7 @@ class ToDo extends Component {
                         disabled={!!removeTasks.size}
                         checked={removeTasks.has(task._id)}
                         hendleSetEditTask={toggleOpenEditTaskModal}
+                        toggleActiveTask={this.toggleActiveTask}
                     />
                 </Col>
             )
@@ -174,6 +227,11 @@ class ToDo extends Component {
         return (
             <>
                 <Container>
+                    <Row>
+                        <Search />
+                    </Row>
+
+
                     <Row className=" justify-content-md-center mt-3 mb-3">
                         <Button
                             variant="outline-secondary"
@@ -233,12 +291,16 @@ class ToDo extends Component {
                     />
                 }
 
+                {
+                    <ToastContainer />
+                }
+
             </>
         )
     }
 }
 const mapStateToProps = (state) => {
-    console.log('todo state' , state)
+    console.log('todo state', state)
     const {
         tasks,
         loading,
@@ -303,8 +365,14 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         toggleOpenEditTaskModal: (task) => {
-            dispatch({ type: actionTypes.TOOGLE_OPEN_EDIT_TASK_MODAL , task })
-        }
+            dispatch({ type: actionTypes.TOOGLE_OPEN_EDIT_TASK_MODAL, task })
+        },
+
+        toggleEditTaskStatus: (task) => {
+            dispatch({ type: actionTypes.TOOGLE_EDIT_TASK_STATUS, task })
+        },
+
+
 
     }
 

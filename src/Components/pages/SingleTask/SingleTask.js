@@ -50,6 +50,7 @@ const SingleTask = (props) => {
         toggleEditSingleTask,
         deleteSingleTask
         
+        
     } = props
 
     if (!singleTask) {
@@ -117,11 +118,11 @@ const SingleTask = (props) => {
 const mapStateToProps = (state) => {
     const {
         singleTask,
-        isEditModalOpen,
+        isEditModalOpen
     } = state.singleTaskState
     return {
         singleTask,
-        isEditModalOpen,
+        isEditModalOpen
     }
 }
 
@@ -130,7 +131,8 @@ const mapDispatchToProps = (dispatch) => {
         setSingleTask: (_id , props) => dispatch(setSingleTaskThunk(_id, props)),
        editSingleTask: (formData) => dispatch(editSingleTaskThunk(formData)),
        toggleEditSingleTask: () => dispatch(toggleEditSingleTaskThunk()),
-       deleteSingleTask: (id , history) => dispatch(deleteSingleTaskThunk(id, history)),
+       deleteSingleTask: (id , history) => dispatch(deleteSingleTaskThunk(id, history))
+    //    toggleEditeSingleTaskStatus: (singleTask) => dispatch(toggleEditeSingleTaskStatusThunk(singleTask))
     }
 }
 

@@ -217,6 +217,20 @@ const reducer = (state = initialState, action) => {
             }
         }
 
+
+        case actionTypes.TOOGLE_EDIT_TASK_STATUS: {
+            let tasks =[...state.todoState.tasks]
+            const index = tasks.findIndex(task => task._id === action.task._id)
+            tasks[index] = action.task;
+            return {
+                ...state,
+                todoState: {
+                    ...state.todoState,
+                    tasks
+                }
+            }
+        }
+
         //contact
 
         case actionTypes.ADD_CONTACT: {
