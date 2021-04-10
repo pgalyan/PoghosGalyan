@@ -56,8 +56,10 @@ class Task extends React.PureComponent {
             className="ml-3"
             disabled={disabled}
             onClick={() => toggleActiveTask(task)}
+            //  {task.status !== "active" ? style=backgroundColor: "green"}
+             style={{backgroundColor: task.status !== "active" ? "green" : "blue" }}
           >
-            <FontAwesomeIcon icon={task.status === "active" ? faHourglassHalf : faCheckSquare} />
+            <FontAwesomeIcon icon={task.status === "active" ? faHourglassHalf : faCheckSquare}  />
           </Button>
         </Card.Body>
       </Card >
