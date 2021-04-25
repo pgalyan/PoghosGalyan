@@ -35,7 +35,7 @@ const Search = (props) => {
         }
         handleSubmit(queryData);
     }
-    console.log('status', status)
+    // console.log('status', status)
     return (
         <div className={styles.searchBody}>
             <div className={styles.searchSection}>
@@ -49,9 +49,9 @@ const Search = (props) => {
                     />
                 </div>
                 <div style={{ display: "flex" }} className={styles.dropdowns}>
-                    <DropdownButton title={!!!status ? "Status" : status.toUpperCase()} id="dropdown-baic-button" variant="secondary" >
-                        <Dropdown.Item onClick={(e) => changeDropDownValue("done", "status")} >Done</Dropdown.Item>
-                        <Dropdown.Item onClick={(e) => changeDropDownValue("active", "status")} >Active</Dropdown.Item>
+                    <DropdownButton  title={!!!status ? "Status" : status.toUpperCase()} id="dropdown-baic-button" variant="secondary" >
+                        <Dropdown.Item onClick={(e) => changeDropDownValue("done", "status") }>Done</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => changeDropDownValue("active", "status" )} >Active</Dropdown.Item>
                         <Dropdown.Item onClick={(e) => changeDropDownValue("", "status")} >Reset</Dropdown.Item>
                     </DropdownButton>
                 </div>

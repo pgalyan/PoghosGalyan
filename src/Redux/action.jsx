@@ -1,8 +1,11 @@
 import actionTypes from './actionTypes'
 
+const API_URL = process.env.REACT_APP_API_URL;
+// console.log("process", process.env);
+
 export const setSingleTaskThunk = (_id , props) => (dispatch) => {
 
-    fetch(`http://localhost:3001/task/${_id}`)
+    fetch(`${API_URL}/task/${_id}`)
             .then(res => res.json())
             .then(data => {
                 if (data.error)
@@ -17,7 +20,7 @@ export const setSingleTaskThunk = (_id , props) => (dispatch) => {
 
 export const editSingleTaskThunk = (formData) => (dispatch) => {
 
-    fetch("http://localhost:3001/task/" + formData._id, {
+    fetch(`${API_URL}/task/` + formData._id, {
         method: "PUT",
         body: JSON.stringify(formData),
         headers: {
@@ -44,7 +47,7 @@ export const toggleEditSingleTaskThunk = () => (dispatch) => {
 
 export const deleteSingleTaskThunk = (id , history) => (dispatch) => {
     
-        fetch(`http://localhost:3001/task/${id}`, {
+        fetch(`${API_URL}/task/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())
@@ -65,7 +68,7 @@ export const sortOrFilterTasksThunk = (queryData) => (dispatch) => {
         query += key + "=" + queryData[key] + "&";
     }
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch(`http://localhost:3001/task` + query.slice(0, query.length - 1))
+    fetch(`${API_URL}/task` + query.slice(0, query.length - 1))
         .then(res => res.json())
         .then(data => {
             if (data.error) throw data.error;
@@ -78,4 +81,3 @@ export const sortOrFilterTasksThunk = (queryData) => (dispatch) => {
             dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: false });
         });
 }
-

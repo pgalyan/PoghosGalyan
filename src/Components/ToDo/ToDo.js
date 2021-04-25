@@ -7,7 +7,10 @@ import dateFormatter from '../../Helpers/date'
 import Preloader from '../Preloader/Preloader'
 import actionTypes from '../../Redux/actionTypes'
 import { connect } from 'react-redux'
-import Search from  '../Search/Search'
+import Search from '../Search/Search'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -130,7 +133,7 @@ class ToDo extends Component {
 
         fetch(`http://localhost:3001/task/${task._id}`, {
             method: "PUT",
-            body: JSON.stringify({status}),
+            body: JSON.stringify({ status }),
             headers: {
                 "Content-type": "application/json"
             }
@@ -227,10 +230,6 @@ class ToDo extends Component {
         return (
             <>
                 <Container>
-                    <Row>
-                        <Search />
-                    </Row>
-
 
                     <Row className=" justify-content-md-center mt-3 mb-3">
                         <Button
@@ -238,16 +237,16 @@ class ToDo extends Component {
                             onClick={toggleOpenAddtaskModal}
                             disabled={!!removeTasks.size}
                         >
-                            Add task
-                            </Button>
-                    </Row>
-                    <Row className="justify-content-md-center">
-                        {loading && <Preloader />}
+                            <FontAwesomeIcon icon={faCalendarPlus} />
 
-                        {!Tasks.length && !loading && <div>Tasks is Empty</div>}
-
-                        {Tasks}
-
+                        </Button>
+                        <Button
+                            variant="outline-secondary"
+                            onClick={toggleOpenAddtaskModal}
+                            disabled={!!removeTasks.size}
+                        >
+                            <FontAwesomeIcon icon={faSearch} />
+                        </Button>
                     </Row>
                     <Row className="justify-content-md-center mt-2 ">
                         <Col>
@@ -269,6 +268,20 @@ class ToDo extends Component {
                             </Button>
                         </Col>
                     </Row>
+
+                    <Row>
+                        <Search />
+                    </Row>
+
+                    <Row className="justify-content-md-center">
+                        {loading && <Preloader />}
+
+                        {!Tasks.length && !loading && <div>Tasks is Empty</div>}
+
+                        {Tasks}
+
+                    </Row>
+
                 </Container>
 
                 {
@@ -300,7 +313,7 @@ class ToDo extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    console.log('todo state', state)
+    // console.log('todo state', state)
     const {
         tasks,
         loading,
@@ -371,9 +384,6 @@ const mapDispatchToProps = (dispatch) => {
         toggleEditTaskStatus: (task) => {
             dispatch({ type: actionTypes.TOOGLE_EDIT_TASK_STATUS, task })
         },
-
-
-
     }
 
 }

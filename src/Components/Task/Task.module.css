@@ -5,9 +5,10 @@
   } */
   
   .tasks {
-    background-color: rgb(231, 242, 247);
+    background-color: rgb(247, 236, 90);
     opacity: 0.9;
     transition: 0.4s;
+    margin-top: 15px;
   }
 
  .checked{
@@ -15,4 +16,10 @@
    transform: scale(1.05);
 
    
+ }
+
+ tasks button {
+   height: 38px;
+   width: 38px;
+   margin: 3px  !important ;
  }
